@@ -32,7 +32,7 @@ if user_query := st.chat_input("Say something"):
         # Call the streaming FastAPI endpoint
         url = "http://localhost:7071/shadow-sk"  # replace with your actual endpoint
         #url = "https://shadow-fastapi-6azng7abetzb2-function-app.azurewebsites.net/shadow"  # replace with your actual endpoint
-        print(payload)
+        #print(payload)
     
         response = requests.post(url, json=payload, stream=True)
 
