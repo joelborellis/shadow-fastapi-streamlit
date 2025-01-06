@@ -62,7 +62,7 @@ async def main():
                                             assistant_reply_box.markdown(
                                                 assistant_reply
                                             )
-                                            await asyncio.sleep(0.01)
+                                            #await asyncio.sleep(0.01)
 
                                 except json.JSONDecodeError:
                                     print("Could not parse JSON:", line)
