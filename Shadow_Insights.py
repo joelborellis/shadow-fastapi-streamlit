@@ -29,10 +29,10 @@ async def main():
         st.session_state.messages.append({"role": "user", "content": prompt})
 
         # Point this to your actual SSE endpoint
-        url = "https://shadow-fastapi-sk-rgrhhk5mtlr7i-function-app.azurewebsites.net/shadow-sk"
-        # url = "http://localhost:7071/shadow-sk"
+        #url = "https://shadow-fastapi-sk-rgrhhk5mtlr7i-function-app.azurewebsites.net/shadow-sk"
+        url = "http://localhost:7071/shadow-sk"
         # Construct request payload
-        payload = {"query": prompt}
+        payload = {"query": prompt, "thread_id": ""}
 
         # Stream the assistant's reply
         with st.chat_message("assistant", avatar="./images/shadow.png"):
@@ -42,6 +42,7 @@ async def main():
 
             # A blank string to store the assistant's reply
             assistant_reply = ""
+            thread_id = ""
             with st.spinner("Shadow is thinking..."):
                 async with aiohttp.ClientSession() as session:
                     async with session.post(url, json=payload) as response:
@@ -65,6 +66,7 @@ async def main():
 
                                         json_data = json.loads(line)
                                         content = json_data.get("data", "")
+                                        thread_id = json_data.get("thread_id", "")
 
                                         if content:
                                             for line in content:
@@ -81,6 +83,7 @@ async def main():
                                     except json.JSONDecodeError:
                                         print("Could not parse JSON:", line)
 
+            print(f"thread_id:  {thread_id}")
             st.session_state.messages.append(
                 {"role": "assistant", "content": assistant_reply}
             )

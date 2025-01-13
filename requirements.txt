@@ -2,3 +2,5 @@ streamlit
 openai
 python-dotenv
 aiohttp
+semantic-kernel
+azure-search-documents==11.6.0b4
