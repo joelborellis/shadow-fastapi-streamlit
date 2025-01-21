@@ -1,16 +1,18 @@
 import asyncio
+import os
 import streamlit as st
 
 from semantic_kernel.kernel import Kernel
 from semantic_kernel.agents.open_ai import OpenAIAssistantAgent
 from semantic_kernel.contents.chat_message_content import ChatMessageContent
 from semantic_kernel.contents.utils.author_role import AuthorRole
-from semantic_kernel.contents.chat_history import ChatHistory
 
 # Import the modified plugin class
 from plugins.shadow_insights_plugin import ShadowInsightsPlugin
 from tools.searchshadow import SearchShadow
 from tools.searchcustomer import SearchCustomer
+
+ASSISTANT_ID = os.environ.get("ASSISTANT_ID")
 
 # Initialize the search clients to pass to the Plugin
 search_shadow_client = SearchShadow()
@@ -86,7 +88,7 @@ async def main():
         st.session_state.messages = []
 
     agent = await OpenAIAssistantAgent.retrieve(
-        id="asst_3PzZuWqDfgCXAqqAtiZmLvdU", kernel=kernel, ai_model_id="gpt-4o"
+        id=ASSISTANT_ID, kernel=kernel, ai_model_id="gpt-4o"
     )
     prompt = st.chat_input("Say something")
     if prompt:

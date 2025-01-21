@@ -12,6 +12,10 @@ async def main():
     # Initialize chat history
     if "messages" not in st.session_state:
         st.session_state.messages = []
+    
+    # Initialize thread_id
+    if "thread_id" not in st.session_state:
+        st.session_state.thread_id = ""
 
     # Display chat messages from history on app rerun
     for message in st.session_state.messages:
@@ -32,7 +36,7 @@ async def main():
         #url = "https://shadow-fastapi-sk-rgrhhk5mtlr7i-function-app.azurewebsites.net/shadow-sk"
         url = "http://localhost:7071/shadow-sk"
         # Construct request payload
-        payload = {"query": prompt, "thread_id": ""}
+        payload = {"query": prompt, "thread_id": st.session_state.thread_id}
 
         # Stream the assistant's reply
         with st.chat_message("assistant", avatar="./images/shadow.png"):
@@ -67,6 +71,7 @@ async def main():
                                         json_data = json.loads(line)
                                         content = json_data.get("data", "")
                                         thread_id = json_data.get("thread_id", "")
+                                        st.session_state.thread_id = thread_id
 
                                         if content:
                                             for line in content:
