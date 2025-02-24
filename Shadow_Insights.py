@@ -12,7 +12,7 @@ async def main():
     # Initialize chat history
     if "messages" not in st.session_state:
         st.session_state.messages = []
-    
+
     # Initialize thread_id
     if "thread_id" not in st.session_state:
         st.session_state.thread_id = ""
@@ -76,14 +76,14 @@ async def main():
                                         if content:
                                             for line in content:
                                                 # empty the container
-                                                # assistant_reply_box.empty()
+                                                #assistant_reply_box.empty()
                                                 # add the new text
                                                 assistant_reply += line
                                                 # display the new text
                                                 assistant_reply_box.markdown(
                                                     assistant_reply
                                                 )
-                                                # await asyncio.sleep(0.01)
+                                                #await asyncio.sleep(0.001)
 
                                     except json.JSONDecodeError:
                                         print("Could not parse JSON:", line)
@@ -91,7 +91,7 @@ async def main():
             print(f"thread_id:  {thread_id}")
             st.session_state.messages.append(
                 {"role": "assistant", "content": assistant_reply}
-            )
+            )  
 
 
 if __name__ == "__main__":

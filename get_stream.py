@@ -2,6 +2,7 @@ import aiohttp
 import asyncio
 import json
 
+
 async def consume_sse(url: str, payload: str):
     """
     Connects to an SSE endpoint and prints out parsed JSON lines
@@ -12,6 +13,8 @@ async def consume_sse(url: str, payload: str):
             async for chunk, _ in response.content.iter_chunks():
                 # Decode chunk into text
                 text_chunk = chunk.decode("utf-8")
+                # Initialize a flag to track if thread_id has been printed
+                thread_id_printed = False
 
                 # The server might send multiple lines in one chunk,
                 # so we split by newlines to handle them individually
@@ -20,7 +23,7 @@ async def consume_sse(url: str, payload: str):
                     if not line:
                         # Skip empty lines
                         continue
-                    # If we reach here, line should be JSON (e.g. {"data": "some content"}).
+                    # If we reach here, line should be JSON (e.g. data: {"data": "This is some content", "thread_id": 1234}).
                     try:
                         # Handle extra "data:" prefix if present
                         if line.startswith("data: "):
@@ -28,17 +31,28 @@ async def consume_sse(url: str, payload: str):
 
                         json_data = json.loads(line)
                         content = json_data.get("data", "")
+                        thread_id = json_data.get("thread_id", "")
+
+                        # Print thread_id only once
+                        if thread_id and not thread_id_printed:
+                            print(f"Thread id: {thread_id}")
+                            thread_id_printed = True
+
                         if content:
-                            # Print character by character
-                            for char in content:
-                                print(char, end="", flush=True)
+                            # Print line by line
+                            for line in content:
+                                print(line, end="", flush=True)
                                 # Adjust sleep time to control the "typing" speed
-                                await asyncio.sleep(0.01)
+                                # await asyncio.sleep(0.01)
                     except json.JSONDecodeError:
                         print("Could not parse JSON:", line)
 
+    return thread_id
+
 
 async def main():
+
+    thread_id = ""
 
     while True:
         # Get user query
@@ -47,12 +61,16 @@ async def main():
             exit(0)
 
         # Point this to your actual SSE endpoint
-        #url = "https://shadow-fastapi-sk-rgrhhk5mtlr7i-function-app.azurewebsites.net/shadow-sk"
-        url = "http://localhost:7071/shadow-sk"
+        # url = "https://shadow-fastapi-sk-rgrhhk5mtlr7i-function-app.azurewebsites.net/shadow-sk-no-stream"
+        url = "http://localhost:7071/shadow-sk-no-stream"
 
         # Construct request payload
-        payload = {"query": query}
-        await consume_sse(url, payload)
+        payload = {
+            "query": query,
+            "thread_id": thread_id,
+        }  # thread_id will be empty first time
+        # call consume what will create the streaming like output
+        thread_id = await consume_sse(url, payload)
 
 
 if __name__ == "__main__":
