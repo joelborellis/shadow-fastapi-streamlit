@@ -33,8 +33,8 @@ async def main():
         st.session_state.messages.append({"role": "user", "content": prompt})
 
         # Point this to your actual SSE endpoint
-        #url = "https://shadow-fastapi-sk-rgrhhk5mtlr7i-function-app.azurewebsites.net/shadow-sk"
-        url = "http://localhost:7071/shadow-sk"
+        url = "https://shadow-fastapi-sk-rgrhhk5mtlr7i-function-app.azurewebsites.net/shadow-sk-no-stream"
+        #url = "http://localhost:7071/shadow-sk"
         # Construct request payload
         payload = {"query": prompt, "thread_id": st.session_state.thread_id}
 
@@ -88,7 +88,7 @@ async def main():
                                     except json.JSONDecodeError:
                                         print("Could not parse JSON:", line)
 
-            print(f"thread_id:  {thread_id}")
+            #print(f"thread_id:  {thread_id}")
             st.session_state.messages.append(
                 {"role": "assistant", "content": assistant_reply}
             )  
