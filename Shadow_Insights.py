@@ -33,8 +33,8 @@ async def main():
         st.session_state.messages.append({"role": "user", "content": prompt})
 
         # Point this to your actual SSE endpoint
-        url = "https://shadow-fastapi-sk-rgrhhk5mtlr7i-function-app.azurewebsites.net/shadow-sk-no-stream"
-        #url = "http://localhost:7071/shadow-sk"
+        url = "https://shadow-fastapi-6azng7abetzb2-function-app.azurewebsites.net/shadow-sk-no-stream"
+        #url = "http://localhost:7071/shadow-sk-no-stream"
         # Construct request payload
         payload = {"query": prompt, "thread_id": st.session_state.thread_id}
 
