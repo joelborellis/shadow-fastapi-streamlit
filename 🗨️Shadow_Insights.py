@@ -4,7 +4,7 @@ import json
 import streamlit as st
 
 st.set_page_config(page_title="Shadow Assistant", page_icon="💬")
-st.subheader("Chat with Shadow", divider=True)
+st.subheader("🗨️ Chat with Shadow", divider=True)
 
 
 async def main():
@@ -26,17 +26,18 @@ async def main():
             with st.chat_message(message["role"], avatar="./images/user.png"):
                 st.markdown(message["content"])
 
-    prompt = st.chat_input("Say something")
-    if prompt:
-        st.chat_message("user", avatar="./images/user.png").markdown(prompt)
+    prompt = st.chat_input("Chat with Shadow...", accept_file=True, file_type=["pdf"])
 
-        st.session_state.messages.append({"role": "user", "content": prompt})
+    if prompt and prompt.text:
+        st.chat_message("user", avatar="./images/user.png").markdown(prompt.text)
+
+        st.session_state.messages.append({"role": "user", "content": prompt.text})
 
         # Point this to your actual SSE endpoint
         url = "https://shadow-fastapi-6azng7abetzb2-function-app.azurewebsites.net/shadow-sk-no-stream"
         #url = "http://localhost:7071/shadow-sk-no-stream"
         # Construct request payload
-        payload = {"query": prompt, "thread_id": st.session_state.thread_id}
+        payload = {"query": prompt.text, "thread_id": st.session_state.thread_id}
 
         # Stream the assistant's reply
         with st.chat_message("assistant", avatar="./images/shadow.png"):
@@ -92,7 +93,8 @@ async def main():
             st.session_state.messages.append(
                 {"role": "assistant", "content": assistant_reply}
             )  
-
+    if prompt and prompt["files"]:
+        pass # TODO implement file upload
 
 if __name__ == "__main__":
     asyncio.run(main())
