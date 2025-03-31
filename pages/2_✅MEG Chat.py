@@ -3,22 +3,22 @@ import asyncio
 import json
 import streamlit as st
 
-st.set_page_config(page_title="Shadow Assistant", page_icon="💬")
-st.subheader("🗨️ Chat with Shadow", divider=True)
+st.set_page_config(page_title="MEG Chat", page_icon="✅")
+st.subheader("✅ MEG Chat", divider=True)
 
 
 async def main():
 
     # Initialize chat history
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+    if "meg_messages" not in st.session_state:
+        st.session_state.meg_messages = []
 
     # Initialize thread_id
-    if "thread_id" not in st.session_state:
-        st.session_state.thread_id = ""
+    if "meg_thread_id" not in st.session_state:
+        st.session_state.meg_thread_id = ""
 
     # Display chat messages from history on app rerun
-    for message in st.session_state.messages:
+    for message in st.session_state.meg_messages:
         if message["role"] == "assistant":
             with st.chat_message(message["role"], avatar="./images/shadow.png"):
                 st.markdown(message["content"])
@@ -26,18 +26,18 @@ async def main():
             with st.chat_message(message["role"], avatar="./images/user.png"):
                 st.markdown(message["content"])
 
-    prompt = st.chat_input("Chat with Shadow...", accept_file=True, file_type=["pdf"])
+    prompt = st.chat_input("Create a MEG...", accept_file=True, file_type=["pdf"])
 
     if prompt and prompt.text:
         st.chat_message("user", avatar="./images/user.png").markdown(prompt.text)
 
-        st.session_state.messages.append({"role": "user", "content": prompt.text})
+        st.session_state.meg_messages.append({"role": "user", "content": prompt.text})
 
         # Point this to your actual SSE endpoint
-        url = "https://shadow-endpoint-k33pqykzy3hqo-function-app.azurewebsites.net/shadow-sk-no-stream"
-        #url = "http://localhost:7071/shadow-sk-no-stream"
+        url = "https://shadow-endpoint-meg-jxe7jdce22roq-function-app.azurewebsites.net/meg-chat"
+        #url = "http://localhost:7071/meg-chat"
         # Construct request payload
-        payload = {"query": prompt.text, "threadId": st.session_state.thread_id, "additional_instructions": None}
+        payload = {"query": prompt.text, "threadId": st.session_state.meg_thread_id, "additional_instructions": None}
 
         # Stream the assistant's reply
         with st.chat_message("assistant", avatar="./images/shadow.png"):
@@ -72,7 +72,7 @@ async def main():
                                         json_data = json.loads(line)
                                         content = json_data.get("data", "")
                                         thread_id = json_data.get("thread_id", "")
-                                        st.session_state.thread_id = thread_id
+                                        st.session_state.meg_thread_id = thread_id
 
                                         if content:
                                             for line in content:
@@ -90,7 +90,7 @@ async def main():
                                         print("Could not parse JSON:", line)
 
             #print(f"thread_id:  {thread_id}")
-            st.session_state.messages.append(
+            st.session_state.meg_messages.append(
                 {"role": "assistant", "content": assistant_reply}
             )  
     if prompt and prompt["files"]:
