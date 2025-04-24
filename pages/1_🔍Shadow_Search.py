@@ -22,7 +22,7 @@ with st.expander("⚙️ Search Parameter Settings"):
         top = tab1.slider("Top Docs", 0, 5, 3)
         # tab3.subheader("Choose an Index")
         index_name = tab2.selectbox(
-            "Choose Index", ("shadow-sales-index", "shadow-sales-index-customer")
+            "Choose Index", ("shadow-sales-index", "shadow-sales-index-customer", "shadow-customer")
         )
 st.divider()
 
@@ -81,6 +81,28 @@ def search_api(query: str) -> str:
             with st.expander("Content"):
                 st.markdown(content)
 
+def search_api_new(query: str) -> str:
+    vector_query = VectorizedQuery(
+        vector=get_embedding(query, model_embed),
+        k_nearest_neighbors=5,
+        fields="text_vector",
+    )
+
+    r = search_client.search(
+        search_text=query,  # this is set to query to force a hybrid search
+        vector_queries=[vector_query],
+        select=["title", "chunk"],
+        top=top,
+    )
+    with st.container():
+        for doc in r:
+            title = doc["title"]
+            score = doc["@search.score"]
+            chunk = doc["chunk"]
+            st.write(f"**Title:** {title}")
+            st.write(f"**Score:** {score}")
+            with st.expander("Content"):
+                st.markdown(chunk)
 
 with st.form("search_form"):
     query = st.text_area(
@@ -92,4 +114,7 @@ with st.form("search_form"):
     st.divider()
 
     if submitted:
-        search_api(query)
+        if index_name.strip() == "shadow-customer":
+            result = search_api_new(query)
+        else:
+            result = search_api(query)
