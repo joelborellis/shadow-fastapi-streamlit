@@ -31,17 +31,20 @@ async def main():
 
     target_account = st.sidebar.selectbox(
         "Target Account",
-        options=["-- Select an account --", "Glaxo", "Catepillar", "North Highland"]
+        options=["-- Select an account --", "Glaxo", "Catepillar", "North Highland", "SBI Growth"],
+        index=1
     )
 
     user_company = st.sidebar.selectbox(
         "User Company",
-        options=["-- Select your company --", "Shadow"]
+        options=["-- Select your company --", "Shadow", "North Highlnd"],
+        index=1
     )
 
     demand_stage = st.sidebar.selectbox(
         "Demand Stage",
-        options=["-- Select demand stage --", "Pre-Demand", "Interest", "Pain", "Need", "Project"]
+        options=["-- Select demand stage --", "Pre-Demand", "Interest", "Pain", "Need", "Project"],
+        index=2
     )
 
     prompt = st.chat_input("Chat with Shadow...", accept_file=True, file_type=["pdf"])
@@ -52,8 +55,8 @@ async def main():
         st.session_state.messages.append({"role": "user", "content": prompt.text})
 
         # Point this to your actual SSE endpoint
-        #url = "https://shadow-endpoint-k33pqykzy3hqo-function-app.azurewebsites.net/shadow-sk-no-stream"
-        url = "http://localhost:7071/shadow-sk-no-stream"
+        url = "https://shadow-endpoint-k33pqykzy3hqo-function-app.azurewebsites.net/shadow-sk-no-stream"
+        #url = "http://localhost:7071/shadow-sk-no-stream"
         # Construct request payload
         payload = {
             "query": prompt.text,

@@ -22,7 +22,7 @@ with st.expander("⚙️ Search Parameter Settings"):
         top = tab1.slider("Top Docs", 0, 5, 3)
         # tab3.subheader("Choose an Index")
         index_name = tab2.selectbox(
-            "Choose Index", ("shadow-sales-index", "shadow-sales-index-customer", "shadow-customer")
+            "Choose Index", ("shadow-sales-index", "shadow-customer")
         )
 st.divider()
 

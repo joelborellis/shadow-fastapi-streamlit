@@ -1,2 +1,5 @@
 .env
 .venv
+NOTES.txt
+__pycache__/
+# Ignore Python bytecode files  
