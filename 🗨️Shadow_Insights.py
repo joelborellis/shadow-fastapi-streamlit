@@ -55,7 +55,7 @@ async def main():
         st.session_state.messages.append({"role": "user", "content": prompt.text})
 
         # Point this to your actual SSE endpoint
-        url = "https://shadow-endpoint-k33pqykzy3hqo-function-app.azurewebsites.net/shadow-sk-no-stream"
+        url = "https://shadow-endpoint-k33pqykzy3hqo-function-app.azurewebsites.net/shadow-sk"
         #url = "http://localhost:7071/shadow-sk-no-stream"
         # Construct request payload
         payload = {
