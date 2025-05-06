@@ -37,7 +37,7 @@ async def main():
 
     user_company = st.sidebar.selectbox(
         "User Company",
-        options=["-- Select your company --", "Shadow", "North Highlnd"],
+        options=["-- Select your company --", "Shadow", "North Highland"],
         index=1
     )
 

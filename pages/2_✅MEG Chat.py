@@ -25,6 +25,15 @@ async def main():
         else:
             with st.chat_message(message["role"], avatar="./images/user.png"):
                 st.markdown(message["content"])
+    
+    # --- Sidebar ---
+    st.sidebar.header("Inputs")
+
+    target_account = st.sidebar.selectbox(
+        "Target Account",
+        options=["-- Select an account --", "Glaxo", "North Highland", "SBI Growth"],
+        index=1
+    )
 
     prompt = st.chat_input("Create a MEG...", accept_file=True, file_type=["pdf"])
 
@@ -37,7 +46,7 @@ async def main():
         url = "https://shadow-endpoint-meg-jxe7jdce22roq-function-app.azurewebsites.net/meg-chat"
         #url = "http://localhost:7071/meg-chat"
         # Construct request payload
-        payload = {"query": prompt.text, "threadId": st.session_state.meg_thread_id, "additional_instructions": None}
+        payload = {"query": prompt.text, "threadId": st.session_state.meg_thread_id, "additional_instructions": "Format your output in markdown ", "target_account": target_account}
 
         # Stream the assistant's reply
         with st.chat_message("assistant", avatar="./images/shadow.png"):
@@ -71,8 +80,8 @@ async def main():
 
                                         json_data = json.loads(line)
                                         content = json_data.get("data", "")
-                                        thread_id = json_data.get("thread_id", "")
-                                        st.session_state.meg_thread_id = thread_id
+                                        threadId = json_data.get("threadId", "")
+                                        st.session_state.meg_thread_id = threadId
 
                                         if content:
                                             for line in content:
