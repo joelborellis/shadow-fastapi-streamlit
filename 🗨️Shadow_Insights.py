@@ -31,13 +31,13 @@ async def main():
 
     target_account = st.sidebar.selectbox(
         "Target Account",
-        options=["-- Select an account --", "Glaxo", "Catepillar", "North Highland", "SBI Growth"],
+        options=["-- Select an account --", "Glaxo", "Allina Health", "SBI Growth", "NYU Langone", "Northside", "Anderson Windows", "Trimble", "GE Healthcare", "Parexel"],
         index=1
     )
 
     user_company = st.sidebar.selectbox(
         "User Company",
-        options=["-- Select your company --", "Shadow", "North Highland"],
+        options=["-- Select your company --", "Shadow", "North Highland", "Multiplan"],
         index=1
     )
 
